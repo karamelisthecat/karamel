@@ -1,4 +1,4 @@
-package init
+package main
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"github.com/berfinsari/projeHost/hostsfile"
 )
 
-func init() {
+func main() {
 	hostsfile.LinesHost, _ = hostsfile.ReadHostFile("/etc/hosts")
 	hostsfile.FindGroupNames()
 	flag.OneFlag()
