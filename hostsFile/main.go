@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"../flag"
-	"../hostsfile"
+	"./flag"
+	"./hostsfile"
 )
 
 func main() {
