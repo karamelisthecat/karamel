@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/berfinsari/projeHost/flag"
-	"github.com/berfinsari/projeHost/hostsfile"
+	"../flag"
+	"../hostsfile"
 )
 
 func main() {
