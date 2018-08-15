@@ -2,7 +2,7 @@ package flag
 
 import (
 	"flag"
-	"github.com/berfinsari/projeHost/hostsfile"
+	"../hostsfile"
 )
 
 func OneFlag() {
