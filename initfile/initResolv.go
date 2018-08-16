@@ -1,4 +1,4 @@
-package init
+package initfile
 
 import (
 	"github.com/karamelisthecat/karamel/resolvconfFile/flag"
