@@ -17,14 +17,18 @@ func userInterface() {
 	var isRunning bool
 	var optionNumber string
 	isRunning = true
-	fmt.Print("/etc/hosts FİLE USER INTERFACE\n")
+	fmt.Println("\n/etc/hosts file")
+	fmt.Println("----------------")
 	for isRunning {
-		fmt.Print("\n1. grup ekleyiniz.\n2. grup görüntüleyiniz.\n3. bulunan grupların listesi.\n4. ip adresi ekleyiniz.\n5. dosyayı yazdır\n6. gruba alan ekle.\n7. IP adresine alias ekle.\ncikis için -1'e basın.\n")
+		fmt.Println("______________________________________")
+		fmt.Println("1. grup ekleyiniz.\n2. grup görüntüleyiniz.\n3. bulunan grupların listesi.\n4. ip adresi ekleyiniz.\n5. dosyayı yazdır\n6. gruba alan ekle.\n7. IP adresine alias ekle.\nAna menüye dönmek için 'q'ya basınız.")
+		fmt.Println("______________________________________")
 		fmt.Print("\nSeçeneklerden birini seçiniz: ")
 		fmt.Scan(&optionNumber)
+		fmt.Printf("\n")
 		switch optionNumber {
-		case "-1":
-			fmt.Println("Çıkılıyor.")
+		case "q":
+			fmt.Println("Ana menüye dönülüyor.")
 			isRunning = false
 			break
 		case "1":

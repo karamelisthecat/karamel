@@ -55,11 +55,12 @@ func AddNewLine() {
 
 // Writing /etc/Hosts file to the screen.
 func WriteLines() {
-	fmt.Println("\n Hosts File \n")
+	fmt.Println("Hosts File ")
+	fmt.Println("----------\n")
 	for i := 0; i < len(LinesHost); i++ {
 		fmt.Print(LinesHost[i])
 	}
-	fmt.Print("\n")
+	WaitUser()
 }
 
 // Writing Group Names to the screen.
@@ -77,13 +78,13 @@ func WriteGroupNames() {
 // Writing Group with all fields.
 func ListGroup() {
 	var nameGroup string
+	WriteGroupNames()
 	fmt.Print("Which group would you like to wiev: ")
 	fmt.Scan(&nameGroup)
 	control := 0
 	temp := "# *" + nameGroup + "*"
 	for i := 0; i < len(LinesHost); i++ {
 		if strings.HasPrefix(LinesHost[i], "# *") && strings.Contains(LinesHost[i], temp) {
-			fmt.Println(nameGroup, " grubunun alanları:") //**
 			for c := i + 1; c < len(LinesHost); c++ {
 				if LinesHost[c] == "\n" {
 					control = 1
@@ -120,6 +121,14 @@ func AddLinesHosts(fieldTemp string, before int, after int) {
 	WriteHostFile(LinesHost)
 }
 
-//FindEmptyLine
 //AddIPBlock
 //AddAlias
+
+func WaitUser() {
+	var temp string
+	entry, _ := fmt.Scanf("%s", &temp)
+	if entry != 0 {
+		fmt.Println("\n")
+	}
+
+}

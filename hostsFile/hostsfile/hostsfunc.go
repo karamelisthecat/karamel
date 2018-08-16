@@ -138,10 +138,16 @@ func groupControl(i int) (bool, int) { //elemanı mı
 }
 
 func AddAlias() {
+	var addIpTemp string
 	ipField, i := checkAlias()
 	if i != -1 {
 		AddLinesHosts(ipField, i, (i + 1))
+	} else {
+		fmt.Printf("Bu ip'yi eklemek ister misiniz: ")
+		fmt.Scan(&addIpTemp)
+
 	}
+
 }
 
 func checkAlias() (string, int) {
