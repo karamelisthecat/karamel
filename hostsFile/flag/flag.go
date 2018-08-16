@@ -2,7 +2,7 @@ package flag
 
 import (
 	"flag"
-	"../hostsfile"
+	"github.com/karamelisthecat/karamel/hostsFile/hostsfile"
 )
 
 func OneFlag() {

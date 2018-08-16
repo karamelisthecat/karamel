@@ -101,19 +101,25 @@ func ListGroup() {
 	}
 }
 
-func FindEmptyLine(i int) bool {
-	var control bool
-	var change []string
-	control = false
+// Find empty line in Hosts file.
+func FindEmptyLine(i int) (bool, int) {
 	for c := i; c < len(LinesHost); c++ {
 		if LinesHost[c] == "\n" {
-			change = append(change, LinesHost[:c]...)
-			temp := ReturnField()
-			change = append(change, temp)
-			LinesHost = append(change, LinesHost[c:]...)
-			control = true
-			break
+			return true, c
 		}
 	}
-	return control
+	return false, -1
 }
+
+//append işlemlerini yaparak dizileri birleştirir ve dosyaya yazar
+func AddLinesHosts(fieldTemp string, before int, after int) {
+	var change []string
+	change = append(change, LinesHost[:before]...)
+	change = append(change, fieldTemp)
+	LinesHost = append(change, LinesHost[after:]...)
+	WriteHostFile(LinesHost)
+}
+
+//FindEmptyLine
+//AddIPBlock
+//AddAlias

@@ -9,17 +9,13 @@ import (
 // Adding ip block to /etc/hosts file.
 func AddIPblock() {
 	var addingField string
-	var change []string
 	addingField = ReturnField()
 	for i := 0; i < len(LinesHost); i++ {
 		if LinesHost[i] == "\n" {
-			change = append(change, LinesHost[:i]...)    //iden öncesi
-			change = append(change, addingField)         //alanı ekliyor
-			LinesHost = append(change, LinesHost[i:]...) //birleştiriyor
+			AddLinesHosts(addingField, i, i)
 			break
 		}
 	}
-	WriteHostFile(LinesHost)
 }
 
 func ReturnField() string {
@@ -102,28 +98,33 @@ func AddGroup() {
 
 func AddFieldstoGroup() { //grubu alıyor kullanıcıdan
 	var addGroup string
+	//	fmt.Println("Bulunan Gruplar:")
+	WriteGroupNames()
 	fmt.Print("\nEklemek istediğiniz grup adını giriniz:")
 	fmt.Scan(&addGroup)
 	setGroup(addGroup)
 }
 
+// Find the group and add ip field.
 func setGroup(addGroup string) { //grubu bulup araya alan ekliyor
-	var control int
+	var ctrl int
 	var emptyLineTemp bool
-	control = 0
-	for i := 0; i < len(LinesHost); i++ { //satırlar arasında geziyor
+	var c int
+	ctrl = 0
+	for i := 0; i < len(LinesHost); i++ {
 		check, j := groupControl(i)
 		if check && addGroup == GroupName[j] {
-			emptyLineTemp = FindEmptyLine(i)
-			if emptyLineTemp == true {
-				control = 1
+			emptyLineTemp, c = FindEmptyLine(i)
+			if emptyLineTemp {
+				fieldTemp := ReturnField()
+				AddLinesHosts(fieldTemp, c, c) //Burada dosyaya yazıyor.
+				ctrl = 1
 				break
-			} //control = 0 da ne yapacak?
+			}
 		}
-		if control == 1 {
-			WriteHostFile(LinesHost)
-			break
-		}
+	}
+	if ctrl == 0 {
+		fmt.Println("Böyle bir grup bulunmamaktadır.")
 	}
 }
 
@@ -137,13 +138,9 @@ func groupControl(i int) (bool, int) { //elemanı mı
 }
 
 func AddAlias() {
-	var change []string
 	ipField, i := checkAlias()
 	if i != -1 {
-		change = append(change, LinesHost[:i]...)
-		change = append(change, ipField)
-		LinesHost = append(change, LinesHost[(i+1):]...)
-		WriteHostFile(LinesHost)
+		AddLinesHosts(ipField, i, (i + 1))
 	}
 }
 

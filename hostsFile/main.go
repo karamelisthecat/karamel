@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"./flag"
-	"./hostsfile"
+	"github.com/karamelisthecat/karamel/hostsFile/flag"
+	"github.com/karamelisthecat/karamel/hostsFile/hostsfile"
 )
 
 func main() {
