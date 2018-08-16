@@ -5,7 +5,7 @@ import (
 	"github.com/karamelisthecat/karamel/resolvconfFile/resolvconf"
 )
 
-func initResolv() {
+func InitResolv() {
 	resolvconf.OpenReadFile()
 	resolvconf.KeepResolvconf()
 	flag.Ifflags()
