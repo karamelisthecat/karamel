@@ -1,8 +1,8 @@
 package flag
 
 import (
-	resolv "../resolvconf"
 	"flag"
+	resolv "github.com/karamelisthecat/karamel/resolvconfFile/resolvconf"
 )
 
 var (
