@@ -6,7 +6,7 @@ import (
 	"github.com/karamelisthecat/karamel/hostsFile/hostsfile"
 )
 
-func init() {
+func initHosts() {
 	hostsfile.LinesHost, _ = hostsfile.ReadHostFile("/etc/hosts")
 	hostsfile.FindGroupNames()
 	flag.OneFlag()
