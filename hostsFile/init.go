@@ -1,4 +1,4 @@
-package main
+package init
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"github.com/karamelisthecat/karamel/hostsFile/hostsfile"
 )
 
-func main() {
+func init() {
 	hostsfile.LinesHost, _ = hostsfile.ReadHostFile("/etc/hosts")
 	hostsfile.FindGroupNames()
 	flag.OneFlag()
