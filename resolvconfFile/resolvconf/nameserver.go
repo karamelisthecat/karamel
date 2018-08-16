@@ -26,35 +26,57 @@ type DNSName struct {
 }
 
 func SelectMenu() {
-	var choice int
-	var dnsss string
-	fmt.Println("1: clear all and just add nameserver")
-	fmt.Println("2: modify file")
-	fmt.Scanln(&choice)
-	if choice == 1 {
-		fmt.Printf("enter DNS: ")
-		entry, _ := fmt.Scanf("%s", &dnsss)
-		fmt.Scanln(entry)
+	var choice string
+	var dns string
+	for {
+		fmt.Println("1: Clear all and just add nameserver")
+		fmt.Println("2: Modify file")
+		fmt.Println("3: Exit")
+		enter, _ := fmt.Scanf("%s", &choice)
+		if enter == 0 {
+			SelectMenu()
+		}
+		if choice == "1" {
+			nameserverList()
+			fmt.Printf("choice one or enter DNS: ")
+			entry, _ := fmt.Scanf("%s", &dns)
+			slct, _ := strconv.Atoi(dns)
+			if entry == 0 {
+				SelectMenu()
+			}
+			if 0 < slct && slct <= 6 {
+				dns = selectNameserver(slct)
+			}
+			tempNameserver = tempNameserver[:0]
+			tempNameserver = append(tempNameserver, "nameserver "+dns+"\n")
 
-		tempNameserver = tempNameserver[:0]
-		tempNameserver = append(tempNameserver, "nameserver "+dnsss+"\n")
-	} else {
-		AddNameserver(Addns)
+		} else if choice == "2" {
+			nameserverMenu()
+		} else if choice == "3" {
+			break
+		} else {
+			SelectMenu()
+		}
 	}
 
 }
 func nameserverMenu() {
 	//kullanıcıyı nameserver alanıyla ilgili yapmak istediği değişikliğe göre ilgili fonk yönlendiriyor.
-	var choose int
+	var choice string
 	fmt.Println("1: Add nameserver")
 	fmt.Println("2: Delete nameserver ")
-	fmt.Println(Addns)
-	fmt.Println(Delns)
-	fmt.Scanln(&choose)
-	if choose == 1 {
+	fmt.Println("3: Back to main menu ")
+	enter, _ := fmt.Scanf("%s", &choice)
+	if enter == 0 {
+		nameserverMenu()
+	}
+	if choice == "1" {
 		AddNameserver(Addns)
-	} else if choose == 2 {
+	} else if choice == "2" {
 		DeleteNameserver(Delns)
+
+	} else if choice == "3" {
+		SelectMenu()
 	} else {
 		fmt.Println("please enter one of 2 options ")
 		nameserverMenu()
@@ -150,7 +172,7 @@ func DeleteNameserver(Delns *int) {
 
 			entry, _ := fmt.Scanf("%s", &no)
 			if entry == 0 {
-				break
+				SelectMenu()
 			}
 			number, _ := strconv.Atoi(no)
 			number = number - 1
