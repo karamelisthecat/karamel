@@ -174,3 +174,11 @@ func checkAlias() (string, int) {
 	}
 	return ipField, i
 }
+
+func WaitUser() {
+	var temp string
+	entry, _ := fmt.Scanf("%s", &temp)
+	if entry != 0 {
+		fmt.Println("\n")
+	}
+}

@@ -121,14 +121,26 @@ func AddLinesHosts(fieldTemp string, before int, after int) {
 	WriteHostFile(LinesHost)
 }
 
-//AddIPBlock
-//AddAlias
-
-func WaitUser() {
-	var temp string
-	entry, _ := fmt.Scanf("%s", &temp)
-	if entry != 0 {
-		fmt.Println("\n")
+//Satır numarası ile komut satırı olmaktan çıkartıyor.
+func RemoveCommendLineIP() {
+	var lineNmbr int
+	var newField string
+	fmt.Printf("\n")
+	for i := 0; i < len(LinesHost); i++ {
+		fmt.Print((i + 1), " ", LinesHost[i])
 	}
+	fmt.Printf("\nLütfen satır numarası girin: ")
+	fmt.Scan(&lineNmbr)
+	newField = deleteCommendLine(lineNmbr - 1)
+	AddLinesHosts(newField, (lineNmbr - 1), (lineNmbr))
+}
 
+//bu satır gerçekten ip satırı mı kontrolü ekle
+
+func deleteCommendLine(lineNmbr int) string {
+	var newField string
+	temp := strings.Split(string(LinesHost[lineNmbr]), "#")
+	//tempin boyutu kontrol edilmelidir
+	newField = string(temp[1])
+	return newField
 }
