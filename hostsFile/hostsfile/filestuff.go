@@ -13,6 +13,7 @@ var (
 	LinesHost []string
 )
 
+//Reading Hosts file.
 func ReadHostFile(filePath string) ([]string, error) { //dosyayı okur
 	var line []string
 	file, err := ioutil.ReadFile(filePath)
@@ -69,7 +70,7 @@ func WriteGroupNames() {
 	if len(GroupName) == 0 {
 		fmt.Println("Hiç grup bulunmamaktadır.")
 	} else {
-		fmt.Println("~~ Groups: ~~")
+		fmt.Println("»»»»» Groups «««««")
 		for i := 0; i < len(GroupName); i++ {
 			fmt.Println(GroupName[i])
 		}
@@ -82,11 +83,13 @@ func ListGroup() {
 	WriteGroupNames()
 	fmt.Print("Which group would you like to wiev: ")
 	fmt.Scan(&nameGroup)
+	fmt.Println("______________________________________")
 	control := 0
 	temp := "# *" + nameGroup + "*"
 	for i := 0; i < len(LinesHost); i++ {
 		if strings.HasPrefix(LinesHost[i], "# *") && strings.Contains(LinesHost[i], temp) {
-			for c := i + 1; c < len(LinesHost); c++ {
+			fmt.Print("\n")
+			for c := i; c < len(LinesHost); c++ {
 				if LinesHost[c] == "\n" {
 					control = 1
 					break
@@ -101,6 +104,7 @@ func ListGroup() {
 	if control == 0 {
 		fmt.Println("Böyle bir grup bulunmamaktadır")
 	}
+	WaitUser()
 }
 
 // Find empty line in Hosts file.

@@ -9,7 +9,9 @@ import (
 func UserOptMenu() bool {
 	var optionNumber string
 	var isRunning bool
+	isRunning = true
 	fmt.Println("______________________________________")
+	fmt.Println("»»»»»      /etc/hosts file       «««««")
 	fmt.Println("______________________________________")
 	fmt.Println("1. Add Group.\n2. View Group and IP Addresses.\n3. List Group Names.\n4. Add IP Address.\n5. View Hosts File.\n6. Add IP Field to Group.\n7. Add Alias to IP Address.\n8. Remove Commend Line Tag to Enable IP Address.\nq: Back to Main Menu")
 	fmt.Println("______________________________________")
@@ -27,6 +29,7 @@ func UserOptMenu() bool {
 		ListGroup()
 	case "3":
 		WriteGroupNames()
+		WaitUser()
 	case "4":
 		AddIPblock()
 	case "5":
@@ -39,6 +42,7 @@ func UserOptMenu() bool {
 		RemoveCommendLineIP()
 	default:
 		fmt.Println("Geçersiz bir işlem girdiniz")
+		WaitUser()
 	}
 	return isRunning
 }
@@ -212,6 +216,7 @@ func checkAlias() (string, int) {
 	return ipField, i
 }
 
+//İşleme devam etmeden önce kullanıcı girişini bekliyor.
 func WaitUser() {
 	var temp string
 	entry, _ := fmt.Scanf("%s", &temp)
