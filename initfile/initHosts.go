@@ -17,14 +17,17 @@ func userInterface() {
 	var isRunning bool
 	var optionNumber string
 	isRunning = true
-	fmt.Print("/etc/hosts FİLE USER INTERFACE\n")
+	fmt.Println("\n/etc/hosts file")
+	fmt.Println("----------------")
 	for isRunning {
-		fmt.Print("\n1. grup ekleyiniz.\n2. grup görüntüleyiniz.\n3. bulunan grupların listesi.\n4. ip adresi ekleyiniz.\n5. dosyayı yazdır\n6. gruba alan ekle.\n7. IP adresine alias ekle.\ncikis için -1'e basın.\n")
+		fmt.Println("______________________________________")
+		fmt.Println("1. Add Group.\n2. View Group and IP Addresses.\n3. List Group Names.\n4. Add IP Address.\n5. View Hosts File.\n6. Add IP Field to Group.\n7. Add Alias to IP Address.\n8. Remove Commend Line Tag to Enable IP Address.\nq: Back to Main Menu")
+		fmt.Println("______________________________________")
 		fmt.Print("\nSeçeneklerden birini seçiniz: ")
 		fmt.Scan(&optionNumber)
+		fmt.Printf("\n")
 		switch optionNumber {
-		case "-1":
-			fmt.Println("Çıkılıyor.")
+		case "q":
 			isRunning = false
 			break
 		case "1":
@@ -41,6 +44,8 @@ func userInterface() {
 			hostsfile.AddFieldstoGroup()
 		case "7":
 			hostsfile.AddAlias()
+		case "8":
+			hostsfile.RemoveCommendLineIP()
 		default:
 			fmt.Println("Geçersiz bir işlem girdiniz")
 		}

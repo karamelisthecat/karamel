@@ -55,11 +55,12 @@ func AddNewLine() {
 
 // Writing /etc/Hosts file to the screen.
 func WriteLines() {
-	fmt.Println("\n Hosts File \n")
+	fmt.Println("Hosts File ")
+	fmt.Println("----------\n")
 	for i := 0; i < len(LinesHost); i++ {
 		fmt.Print(LinesHost[i])
 	}
-	fmt.Print("\n")
+	WaitUser()
 }
 
 // Writing Group Names to the screen.
@@ -77,13 +78,13 @@ func WriteGroupNames() {
 // Writing Group with all fields.
 func ListGroup() {
 	var nameGroup string
+	WriteGroupNames()
 	fmt.Print("Which group would you like to wiev: ")
 	fmt.Scan(&nameGroup)
 	control := 0
 	temp := "# *" + nameGroup + "*"
 	for i := 0; i < len(LinesHost); i++ {
 		if strings.HasPrefix(LinesHost[i], "# *") && strings.Contains(LinesHost[i], temp) {
-			fmt.Println(nameGroup, " grubunun alanları:") //**
 			for c := i + 1; c < len(LinesHost); c++ {
 				if LinesHost[c] == "\n" {
 					control = 1
@@ -120,6 +121,26 @@ func AddLinesHosts(fieldTemp string, before int, after int) {
 	WriteHostFile(LinesHost)
 }
 
-//FindEmptyLine
-//AddIPBlock
-//AddAlias
+//Satır numarası ile komut satırı olmaktan çıkartıyor.
+func RemoveCommendLineIP() {
+	var lineNmbr int
+	var newField string
+	fmt.Printf("\n")
+	for i := 0; i < len(LinesHost); i++ {
+		fmt.Print((i + 1), " ", LinesHost[i])
+	}
+	fmt.Printf("\nLütfen satır numarası girin: ")
+	fmt.Scan(&lineNmbr)
+	newField = deleteCommendLine(lineNmbr - 1)
+	AddLinesHosts(newField, (lineNmbr - 1), (lineNmbr))
+}
+
+//bu satır gerçekten ip satırı mı kontrolü ekle
+
+func deleteCommendLine(lineNmbr int) string {
+	var newField string
+	temp := strings.Split(string(LinesHost[lineNmbr]), "#")
+	//tempin boyutu kontrol edilmelidir
+	newField = string(temp[1])
+	return newField
+}
