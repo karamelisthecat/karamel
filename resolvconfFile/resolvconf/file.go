@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	path                         = "/run/systemd/resolve/stub-resolv.conf"
+	path                         = "/etc/resolv.conf"
 	lines                        []string
 	temp, change, tempNameserver []string
 )
