@@ -27,74 +27,103 @@ type DNSName struct {
 
 func SelectMenu() {
 	var choice string
-	var dns string
+Loop:
 	for {
 		fmt.Println("1: Clear all and just add nameserver")
 		fmt.Println("2: Modify file")
-		fmt.Println("3: Exit")
+		fmt.Println("3: List nameservers")
+		fmt.Println("q: Exit")
 		enter, _ := fmt.Scanf("%s", &choice)
 		if enter == 0 {
 			SelectMenu()
 		}
-		if choice == "1" {
-			nameserverList()
-			fmt.Printf("choice one or enter DNS: ")
-			entry, _ := fmt.Scanf("%s", &dns)
-			slct, _ := strconv.Atoi(dns)
-			if entry == 0 {
-				SelectMenu()
-			}
-			if 0 < slct && slct <= 6 {
-				dns = selectNameserver(slct)
-			}
-			tempNameserver = tempNameserver[:0]
-			tempNameserver = append(tempNameserver, "nameserver "+dns+"\n")
-
-		} else if choice == "2" {
-			nameserverMenu()
-		} else if choice == "3" {
+		switch choice {
+		case "1":
+			addOneNameserver()
 			break
-		} else {
-			SelectMenu()
+		case "2":
+			nameserverMenu()
+			break
+		case "3":
+			lastNameserver()
+			break
+		case "q":
+			break Loop
+		default:
+			fmt.Println("Please enter one of 3 options!")
+			continue Loop
 		}
 	}
-
 }
 func nameserverMenu() {
 	//kullanıcıyı nameserver alanıyla ilgili yapmak istediği değişikliğe göre ilgili fonk yönlendiriyor.
-	var choice string
-	fmt.Println("1: Add nameserver")
-	fmt.Println("2: Delete nameserver ")
-	fmt.Println("3: Back to main menu ")
-	enter, _ := fmt.Scanf("%s", &choice)
-	if enter == 0 {
-		nameserverMenu()
-	}
-	if choice == "1" {
-		AddNameserver(Addns)
-	} else if choice == "2" {
-		DeleteNameserver(Delns)
-
-	} else if choice == "3" {
-		SelectMenu()
-	} else {
-		fmt.Println("please enter one of 2 options ")
-		nameserverMenu()
+Loop:
+	for {
+		var choice string
+		fmt.Println("1: Add nameserver")
+		fmt.Println("2: Delete nameserver ")
+		fmt.Println("q: Back to main menu ")
+		enter, _ := fmt.Scanf("%s", &choice)
+		if enter == 0 {
+			nameserverMenu()
+		}
+		switch choice {
+		case "1":
+			AddNameserver(Addns)
+			break Loop
+		case "2":
+			DeleteNameserver(Delns)
+			break Loop
+		case "q":
+			break Loop
+		default:
+			fmt.Println("please enter one of 3 options! ")
+			continue Loop
+		}
 	}
 }
-
 func nameserverList() {
 	fmt.Println("**********************************************************")
 	for i := 0; i < len(list); i++ {
 		fmt.Println(i+1, ": ", list[i].name)
 	}
 	fmt.Println("**********************************************************")
-
 }
 func selectNameserver(slct int) (str string) {
 
 	//çağrıldığı program için kullanıcının seçtiği dnsi return ediyor.
 	return list[slct-1].address1
+}
+func addOneNameserver() {
+	var dns string
+	nameserverList()
+	fmt.Printf("choice one or enter DNS: ")
+	entry, _ := fmt.Scanf("%s", &dns)
+	slct, _ := strconv.Atoi(dns)
+	if entry == 0 {
+		SelectMenu()
+	}
+	if 0 < slct && slct <= 6 {
+		dns = selectNameserver(slct)
+	}
+	tempNameserver = tempNameserver[:0]
+	tempNameserver = append(tempNameserver, "nameserver "+dns+"\n")
+	fmt.Println("\nLAST VIEW OF THE NAMESERVER LIST")
+	fmt.Println("**********************************************************")
+
+	for i := 0; i < len(tempNameserver); i++ {
+		fmt.Println(tempNameserver[i])
+	}
+	fmt.Println("**********************************************************")
+
+}
+func lastNameserver() {
+	fmt.Println("**********************************************************")
+	for i := 0; i < len(tempNameserver); i++ {
+		fmt.Println(tempNameserver[i])
+	}
+	fmt.Println("**********************************************************")
+
 }
 
 func AddNameserver(Addns *string) {
@@ -118,7 +147,7 @@ func AddNameserver(Addns *string) {
 			break
 		} else {
 
-			fmt.Println("eklemek istediğiniz sırayı seçiniz")
+			fmt.Println("Select the line")
 			for i := 0; i < 3; i++ {
 				if i < len(tempNameserver) {
 					fmt.Println(i+1, ": ", tempNameserver[i])
