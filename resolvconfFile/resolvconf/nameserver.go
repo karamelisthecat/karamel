@@ -45,7 +45,7 @@ Loop:
 			nameserverMenu()
 			break
 		case "3":
-			lastNameserver()
+			lastViewNameserver()
 			break
 		case "q":
 			break Loop
@@ -117,7 +117,7 @@ func addOneNameserver() {
 	fmt.Println("**********************************************************")
 
 }
-func lastNameserver() {
+func lastViewNameserver() {
 	fmt.Println("**********************************************************")
 	for i := 0; i < len(tempNameserver); i++ {
 		fmt.Println(tempNameserver[i])
@@ -127,7 +127,7 @@ func lastNameserver() {
 }
 
 func AddNameserver(Addns *string) {
-	var roww string
+	var rowStr string
 	var dns string
 	for {
 		if Addns != nil {
@@ -146,8 +146,7 @@ func AddNameserver(Addns *string) {
 			}
 			break
 		} else {
-
-			fmt.Println("Select the line")
+			fmt.Println("Select the line or enter 'q' for exit")
 			for i := 0; i < 3; i++ {
 				if i < len(tempNameserver) {
 					fmt.Println(i+1, ": ", tempNameserver[i])
@@ -155,10 +154,13 @@ func AddNameserver(Addns *string) {
 					fmt.Println(i+1, ":\n")
 				}
 			}
-			ent, _ := fmt.Scanf("%s", &roww)
-			row, _ := strconv.Atoi(roww)
-			if ent == 0 || row/1 != row || row > 3 {
+			ent, _ := fmt.Scanf("%s", &rowStr)
+			if rowStr == "q" || ent == 0 {
 				break
+			}
+			row, _ := strconv.Atoi(rowStr)
+			if row != 1 && row != 2 && row != 3 {
+				continue
 			}
 			fmt.Println("choose one or enter different DNS: ")
 			nameserverList()
@@ -167,7 +169,6 @@ func AddNameserver(Addns *string) {
 			if entry == 0 {
 				break
 			}
-
 			if 0 < slct && slct <= 6 {
 				dns = selectNameserver(slct)
 			}
@@ -183,33 +184,36 @@ func DeleteNameserver(Delns *int) {
 	for {
 		if Delns != nil {
 			if *Delns >= 1 && *Delns <= 3 {
-
 				tempNameserver[len(tempNameserver)-1] = tempNameserver[*Delns-1]
 				tempNameserver[*Delns-1] = tempNameserver[len(tempNameserver)-1]
 				tempNameserver = tempNameserver[:len(tempNameserver)-1]
-
 			}
 			break
 		} else {
-
 			var no string
-
 			for i := 0; i < len(tempNameserver); i++ {
 				fmt.Println(i+1, ":", tempNameserver[i])
 			}
-			fmt.Printf("please select the number you want to delete in nameservers: ")
-
+			fmt.Printf("please select the number you want to delete in nameservers or enter 'q' for exit: ")
 			entry, _ := fmt.Scanf("%s", &no)
+			if no == "q" {
+				break
+			}
 			if entry == 0 {
 				SelectMenu()
 			}
 			number, _ := strconv.Atoi(no)
+			if number > len(tempNameserver) {
+				continue
+			}
+			if number != 1 && number != 2 && number != 3 {
+				continue
+			}
+
 			number = number - 1
 			tempNameserver[len(tempNameserver)-1] = tempNameserver[number]
 			tempNameserver[number] = tempNameserver[len(tempNameserver)-1]
 			tempNameserver = tempNameserver[:len(tempNameserver)-1]
-
 		}
 	}
-
 }
