@@ -84,6 +84,10 @@ func ListGroup() {
 	fmt.Print("Which group would you like to wiev: ")
 	fmt.Scan(&nameGroup)
 	fmt.Println("______________________________________")
+	FindtheGroup(nameGroup)
+}
+
+func FindtheGroup(nameGroup string) {
 	control := 0
 	temp := "# *" + nameGroup + "*"
 	for i := 0; i < len(LinesHost); i++ {
@@ -105,6 +109,7 @@ func ListGroup() {
 		fmt.Println("Böyle bir grup bulunmamaktadır")
 	}
 	WaitUser()
+
 }
 
 // Find empty line in Hosts file.

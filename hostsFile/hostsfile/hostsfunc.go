@@ -54,6 +54,8 @@ func AddIPblock() {
 	for i := 0; i < len(LinesHost); i++ {
 		if LinesHost[i] == "\n" {
 			AddLinesHosts(addingField, i, i)
+			fmt.Println("Success!")
+			lastViewoftheFile()
 			break
 		}
 	}
@@ -75,7 +77,7 @@ func addHostname() string {
 	var control bool
 	control = true
 	for control {
-		fmt.Print("\nEklemek istediğiniz hostname'i giriniz:") //sadece - ve . kontrolü eksik.
+		fmt.Print("Eklemek istediğiniz hostname'i giriniz:") //sadece - ve . kontrolü eksik.
 		fmt.Scan(&hostname)
 		control, hostname = hostnameCheck(hostname)
 	}
@@ -100,7 +102,7 @@ func checkIP() (string, error) {
 		fmt.Scanln(&ipv4)
 		ipv4Addr = net.ParseIP(ipv4)
 		if ipv4Addr.To4() == nil {
-			fmt.Println("girdiğiniz ip adresi hatalıdır. ")
+			fmt.Println("girdiğiniz ip adresi hatalıdır. \n")
 			//                  return nil, error.Error() err koy!
 		} else {
 			break
@@ -113,27 +115,64 @@ func checkIP() (string, error) {
 func AddGroup() {
 	var newgroup string
 	var group string
-	var control = 0
+	var control = true
 	fmt.Print("Eklenecek grup adını girin: ")
 	fmt.Scan(&group)
-	for i := 0; i < len(GroupName); i++ {
-		if GroupName[i] == group {
-			fmt.Print("Bu grup bulunmaktadır") //err ekle
-			control = 1
-		}
-	}
-	if strings.Contains(group, "*") {
-		control = 1
-		fmt.Print("İçerisinde * işareti olan bir grup adı oluşturamazsınız")
-	}
-	if control == 0 {
-		//      addNewLine() //grup eklemeden önce boşluk ekliyor
+	control = groupCheck(group)
+	if control {
 		newgroup = "# *" + group + "*" + "\n"
 		LinesHost = append(LinesHost, newgroup)
 		GroupName = append(GroupName, group)
 		WriteHostFile(LinesHost)
 		AddNewLine()
 		setGroup(group)
+		for {
+			if askOpt() {
+				setGroup(group)
+			} else {
+				break
+			}
+		}
+		fmt.Println("______________________________________")
+		fmt.Printf("\n" + group + " isimli grup eklenmiştir!")
+		FindtheGroup(group)
+		lastViewoftheFile()
+	}
+}
+
+//grup adı kullanılabilir mi diye bakıyor.
+func groupCheck(group string) bool {
+	for i := 0; i < len(GroupName); i++ {
+		if GroupName[i] == group {
+			fmt.Print("Bu grup bulunmaktadır") //err ekle
+			return false
+		}
+	}
+	if strings.Contains(group, "*") {
+		fmt.Print("İçerisinde * işareti olan bir grup adı oluşturamazsınız")
+		return false
+	}
+	return true
+}
+
+//Kullanıcıya daha fazla eklemek ister misiniz diye soruyor.
+func askOpt() bool {
+	var userOpt string
+	fmt.Print("\nDaha fazla eklemek ister misiniz? \n(Eklemek istiyorsanız 'y' ya da 'Y' girmelisiniz): ")
+	fmt.Scan(&userOpt)
+	if userOpt == "y" || userOpt == "Y" {
+		return true
+	}
+	return false
+}
+
+//Dosyanın son halini görüntülemek ister mi diye kullanıcıya soruyor.
+func lastViewoftheFile() {
+	var userOpt string
+	fmt.Print("\nDosyanın son halini görüntülemek ister misiniz? \n(Görüntülemek için 'y' ya da 'Y' girmelisiniz: ")
+	fmt.Scan(&userOpt)
+	if userOpt == "y" || userOpt == "Y" {
+		WriteLines()
 	}
 }
 
@@ -144,6 +183,8 @@ func AddFieldstoGroup() { //grubu alıyor kullanıcıdan
 	fmt.Print("\nEklemek istediğiniz grup adını giriniz:")
 	fmt.Scan(&addGroup)
 	setGroup(addGroup)
+	fmt.Println("Success!")
+	lastViewoftheFile()
 }
 
 // Find the group and add ip field.
@@ -166,9 +207,11 @@ func setGroup(addGroup string) { //grubu bulup araya alan ekliyor
 	}
 	if ctrl == 0 {
 		fmt.Println("Böyle bir grup bulunmamaktadır.")
+		WaitUser()
 	}
 }
 
+//fonksiyon adını düzenle
 func groupControl(i int) (bool, int) { //elemanı mı
 	for j := 0; j < len(GroupName); j++ {
 		if strings.HasPrefix(LinesHost[i], "# *") && strings.Contains(LinesHost[i], "*"+GroupName[j]+"*") {
@@ -178,6 +221,7 @@ func groupControl(i int) (bool, int) { //elemanı mı
 	return false, -1
 }
 
+//Verilen ip adresine alias ekler.
 func AddAlias() {
 	var addIpTemp string
 	ipField, i := checkAlias()
