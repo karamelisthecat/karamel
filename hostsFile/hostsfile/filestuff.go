@@ -3,6 +3,7 @@ package hostsfile
 import (
 	"fmt"
 	"io/ioutil"
+	"strconv"
 	"strings"
 )
 
@@ -12,6 +13,7 @@ var (
 	LinesHost []string
 )
 
+//Reading Hosts file.
 func ReadHostFile(filePath string) ([]string, error) { //dosyayı okur
 	var line []string
 	file, err := ioutil.ReadFile(filePath)
@@ -68,7 +70,7 @@ func WriteGroupNames() {
 	if len(GroupName) == 0 {
 		fmt.Println("Hiç grup bulunmamaktadır.")
 	} else {
-		fmt.Println("~~ Groups: ~~")
+		fmt.Println("»»»»» Groups «««««")
 		for i := 0; i < len(GroupName); i++ {
 			fmt.Println(GroupName[i])
 		}
@@ -81,11 +83,13 @@ func ListGroup() {
 	WriteGroupNames()
 	fmt.Print("Which group would you like to wiev: ")
 	fmt.Scan(&nameGroup)
+	fmt.Println("______________________________________")
 	control := 0
 	temp := "# *" + nameGroup + "*"
 	for i := 0; i < len(LinesHost); i++ {
 		if strings.HasPrefix(LinesHost[i], "# *") && strings.Contains(LinesHost[i], temp) {
-			for c := i + 1; c < len(LinesHost); c++ {
+			fmt.Print("\n")
+			for c := i; c < len(LinesHost); c++ {
 				if LinesHost[c] == "\n" {
 					control = 1
 					break
@@ -100,6 +104,7 @@ func ListGroup() {
 	if control == 0 {
 		fmt.Println("Böyle bir grup bulunmamaktadır")
 	}
+	WaitUser()
 }
 
 // Find empty line in Hosts file.
@@ -123,24 +128,46 @@ func AddLinesHosts(fieldTemp string, before int, after int) {
 
 //Satır numarası ile komut satırı olmaktan çıkartıyor.
 func RemoveCommendLineIP() {
-	var lineNmbr int
-	var newField string
-	fmt.Printf("\n")
-	for i := 0; i < len(LinesHost); i++ {
-		fmt.Print((i + 1), " ", LinesHost[i])
-	}
-	fmt.Printf("\nLütfen satır numarası girin: ")
-	fmt.Scan(&lineNmbr)
+	var lineNmbr int    //kullanıcıdan alınan satır no
+	var newField string // # çıkmış hali
+	writeHostFilewithNmbr()
+	lineNmbr = checkUserInput()
 	newField = deleteCommendLine(lineNmbr - 1)
 	AddLinesHosts(newField, (lineNmbr - 1), (lineNmbr))
+	fmt.Println("______________________________________")
+	fmt.Println("Success! Final version of hosts file: ")
+	writeHostFilewithNmbr()
+	WaitUser()
 }
 
-//bu satır gerçekten ip satırı mı kontrolü ekle
+//kullanıcıdan satır numarasını alıyor ve o satır geçerli mi kontrol ediyor.
+func checkUserInput() int {
+	var lines string
+	fmt.Printf("\nLütfen satır numarası girin: ")
+	entry, _ := fmt.Scanf("%s", &lines)
+	lineNmbr, err := strconv.Atoi(lines)
+	if err != nil || entry == 0 || lineNmbr > len(LinesHost) || lineNmbr < 1 {
+		fmt.Println("Geçersiz satır numarası girdiniz")
+		checkUserInput()
+	} else if strings.HasPrefix(LinesHost[lineNmbr-1], "#") != true || LinesHost[lineNmbr-1] == "" {
+		fmt.Println("Bu satır yorum satırı değildir.")
+		checkUserInput()
+	} else if strings.HasPrefix(LinesHost[lineNmbr-1], "#") && strings.Contains(LinesHost[lineNmbr-1], "\t") != true {
+		fmt.Println("Bu satır bir IP alanı içermez.")
+		checkUserInput()
+	}
+	return lineNmbr
+}
 
 func deleteCommendLine(lineNmbr int) string {
-	var newField string
 	temp := strings.Split(string(LinesHost[lineNmbr]), "#")
-	//tempin boyutu kontrol edilmelidir
-	newField = string(temp[1])
-	return newField
+	return string(temp[1])
+}
+
+func writeHostFilewithNmbr() {
+	fmt.Printf("\n")
+	for i := 0; i < len(LinesHost); i++ { //dosyayı yazdır
+		fmt.Print((i + 1), " ", LinesHost[i])
+	}
+	fmt.Printf("\n")
 }

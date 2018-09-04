@@ -6,6 +6,47 @@ import (
 	"strings"
 )
 
+func UserOptMenu() bool {
+	var optionNumber string
+	var isRunning bool
+	isRunning = true
+	fmt.Println("______________________________________")
+	fmt.Println("»»»»»      /etc/hosts file       «««««")
+	fmt.Println("______________________________________")
+	fmt.Println("1. Add Group.\n2. View Group and IP Addresses.\n3. List Group Names.\n4. Add IP Address.\n5. View Hosts File.\n6. Add IP Field to Group.\n7. Add Alias to IP Address.\n8. Remove Commend Line Tag to Enable IP Address.\nq: Back to Main Menu")
+	fmt.Println("______________________________________")
+	fmt.Print("Seçeneklerden birini seçiniz: ")
+	fmt.Scan(&optionNumber)
+	fmt.Println("______________________________________")
+	fmt.Printf("\n")
+	switch optionNumber {
+	case "q":
+		isRunning = false
+		break
+	case "1":
+		AddGroup()
+	case "2":
+		ListGroup()
+	case "3":
+		WriteGroupNames()
+		WaitUser()
+	case "4":
+		AddIPblock()
+	case "5":
+		WriteLines()
+	case "6":
+		AddFieldstoGroup()
+	case "7":
+		AddAlias()
+	case "8":
+		RemoveCommendLineIP()
+	default:
+		fmt.Println("Geçersiz bir işlem girdiniz")
+		WaitUser()
+	}
+	return isRunning
+}
+
 // Adding ip block to /etc/hosts file.
 func AddIPblock() {
 	var addingField string
@@ -175,10 +216,19 @@ func checkAlias() (string, int) {
 	return ipField, i
 }
 
+//İşleme devam etmeden önce kullanıcı girişini bekliyor.
 func WaitUser() {
 	var temp string
 	entry, _ := fmt.Scanf("%s", &temp)
 	if entry != 0 {
 		fmt.Println("\n")
+	}
+}
+
+// kullanıcı işlem sırasında iptal etmek isterse diye ??
+func cancelOpt(ctrl string) {
+	if ctrl == "q" {
+		fmt.Println("Islem iptal edildi. \nAna menüye dönülüyor.")
+		_ = UserOptMenu()
 	}
 }
