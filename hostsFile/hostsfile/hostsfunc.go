@@ -227,10 +227,13 @@ func AddAlias() {
 	ipField, i := checkAlias()
 	if i != -1 {
 		AddLinesHosts(ipField, i, (i + 1))
+		fmt.Println("Success!")
+		lastViewoftheFile()
 	} else {
-		fmt.Printf("Bu ip'yi eklemek ister misiniz: ")
+		fmt.Printf("Bu ip'yi eklemek ister misiniz? \n(Eklemek istiyorsanız 'y' ya da 'Y' girmelisiniz): ")
 		fmt.Scan(&addIpTemp)
-
+		AddIPblock()
+		lastViewoftheFile()
 	}
 
 }
@@ -240,11 +243,11 @@ func checkAlias() (string, int) {
 	var ctrl = false
 	var ipField string
 	var i int
-	fmt.Print("\nHangi ip adresine alias eklensin: ")
+	fmt.Printf("Hangi ip adresine alias eklensin: ")
 	fmt.Scan(&iptemp)
 	for i = 0; i < len(LinesHost); i++ {
 		if strings.HasPrefix(LinesHost[i], iptemp) {
-			fmt.Print("\nNe eklensin: ")
+			fmt.Printf("Ne eklensin: ")
 			var addTemp string
 			fmt.Scan(&addTemp)
 			bolTemp := strings.Split(string(LinesHost[i]), "\n")

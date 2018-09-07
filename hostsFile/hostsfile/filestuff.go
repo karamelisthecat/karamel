@@ -57,8 +57,8 @@ func AddNewLine() {
 
 // Writing /etc/Hosts file to the screen.
 func WriteLines() {
-	fmt.Println("Hosts File ")
-	fmt.Println("----------\n")
+	fmt.Println("\nHosts File ")
+	fmt.Println("______________________________________\n")
 	for i := 0; i < len(LinesHost); i++ {
 		fmt.Print(LinesHost[i])
 	}
