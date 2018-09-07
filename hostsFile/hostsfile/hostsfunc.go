@@ -55,7 +55,7 @@ func AddIPblock() {
 		if LinesHost[i] == "\n" {
 			AddLinesHosts(addingField, i, i)
 			fmt.Println("Success!")
-			lastViewoftheFile()
+			LastViewoftheFile()
 			break
 		}
 	}
@@ -136,7 +136,7 @@ func AddGroup() {
 		fmt.Println("______________________________________")
 		fmt.Printf("\n" + group + " isimli grup eklenmiştir!")
 		FindtheGroup(group)
-		lastViewoftheFile()
+		LastViewoftheFile()
 	}
 }
 
@@ -167,7 +167,7 @@ func askOpt() bool {
 }
 
 //Dosyanın son halini görüntülemek ister mi diye kullanıcıya soruyor.
-func lastViewoftheFile() {
+func LastViewoftheFile() {
 	var userOpt string
 	fmt.Print("\nDosyanın son halini görüntülemek ister misiniz? \n(Görüntülemek için 'y' ya da 'Y' girmelisiniz: ")
 	fmt.Scan(&userOpt)
@@ -184,7 +184,7 @@ func AddFieldstoGroup() { //grubu alıyor kullanıcıdan
 	fmt.Scan(&addGroup)
 	setGroup(addGroup)
 	fmt.Println("Success!")
-	lastViewoftheFile()
+	LastViewoftheFile()
 }
 
 // Find the group and add ip field.
@@ -221,19 +221,19 @@ func groupControl(i int) (bool, int) { //elemanı mı
 	return false, -1
 }
 
-//Verilen ip adresine alias ekler.
+//Adding Alias to specific IP address.
 func AddAlias() {
 	var addIpTemp string
 	ipField, i := checkAlias()
 	if i != -1 {
 		AddLinesHosts(ipField, i, (i + 1))
 		fmt.Println("Success!")
-		lastViewoftheFile()
+		LastViewoftheFile()
 	} else {
 		fmt.Printf("Bu ip'yi eklemek ister misiniz? \n(Eklemek istiyorsanız 'y' ya da 'Y' girmelisiniz): ")
 		fmt.Scan(&addIpTemp)
 		AddIPblock()
-		lastViewoftheFile()
+		LastViewoftheFile()
 	}
 
 }

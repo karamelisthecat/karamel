@@ -65,6 +65,13 @@ func WriteLines() {
 	WaitUser()
 }
 
+// Writing /etc/Hosts file to the screen with number.
+func writeHostFilewithNmbr() {
+	for i := 0; i < len(LinesHost); i++ { //dosyayı yazdır
+		fmt.Print((i + 1), " ", LinesHost[i])
+	}
+}
+
 // Writing Group Names to the screen.
 func WriteGroupNames() {
 	if len(GroupName) == 0 {
@@ -140,28 +147,35 @@ func RemoveCommendLineIP() {
 	newField = deleteCommendLine(lineNmbr - 1)
 	AddLinesHosts(newField, (lineNmbr - 1), (lineNmbr))
 	fmt.Println("______________________________________")
-	fmt.Println("Success! Final version of hosts file: ")
-	writeHostFilewithNmbr()
+	//	fmt.Println("Success! Final version of hosts file: ")
+	fmt.Println("Success!")
+	fmt.Println(lineNmbr, ". satır artık yorum satırı değil.")
+	LastViewoftheFile()
 	WaitUser()
 }
 
 //kullanıcıdan satır numarasını alıyor ve o satır geçerli mi kontrol ediyor.
 func checkUserInput() int {
 	var lines string
-	fmt.Printf("\nLütfen satır numarası girin: ")
-	entry, _ := fmt.Scanf("%s", &lines)
-	lineNmbr, err := strconv.Atoi(lines)
-	if err != nil || entry == 0 || lineNmbr > len(LinesHost) || lineNmbr < 1 {
-		fmt.Println("Geçersiz satır numarası girdiniz")
-		checkUserInput()
-	} else if strings.HasPrefix(LinesHost[lineNmbr-1], "#") != true || LinesHost[lineNmbr-1] == "" {
-		fmt.Println("Bu satır yorum satırı değildir.")
-		checkUserInput()
-	} else if strings.HasPrefix(LinesHost[lineNmbr-1], "#") && strings.Contains(LinesHost[lineNmbr-1], "\t") != true {
-		fmt.Println("Bu satır bir IP alanı içermez.")
-		checkUserInput()
+	var LineNmbr int
+	for {
+		var err error
+		fmt.Printf("\nLütfen satır numarası girin: ")
+		entry, _ := fmt.Scanf("%s", &lines)
+		LineNmbr, err = strconv.Atoi(lines)
+		if err != nil || entry == 0 || LineNmbr > len(LinesHost) || LineNmbr < 1 {
+			fmt.Println("Geçersiz satır numarası girdiniz")
+			continue
+		} else if strings.HasPrefix(LinesHost[LineNmbr-1], "#") != true || LinesHost[LineNmbr-1] == "" {
+			fmt.Println("Bu satır yorum satırı değildir.")
+			continue
+		} else if strings.HasPrefix(LinesHost[LineNmbr-1], "#") && strings.Contains(LinesHost[LineNmbr-1], "\t") != true {
+			fmt.Println("Bu satır bir IP alanı içermez.")
+			continue
+		}
+		break
 	}
-	return lineNmbr
+	return LineNmbr
 }
 
 func deleteCommendLine(lineNmbr int) string {
@@ -169,10 +183,6 @@ func deleteCommendLine(lineNmbr int) string {
 	return string(temp[1])
 }
 
-func writeHostFilewithNmbr() {
-	fmt.Printf("\n")
-	for i := 0; i < len(LinesHost); i++ { //dosyayı yazdır
-		fmt.Print((i + 1), " ", LinesHost[i])
-	}
-	fmt.Printf("\n")
+func AddUnderscoreLine() {
+	fmt.Println("______________________________________")
 }
