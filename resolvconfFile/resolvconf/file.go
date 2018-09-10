@@ -70,6 +70,9 @@ func SaveChange() {
 	bytes := []byte(justString)
 	_ = ioutil.WriteFile(path, bytes, 0644)
 	fmt.Println("LAST VIEW OF THE FILE")
+	change = change[:0]
+	temp = temp[:0]
+	tempNameserver = tempNameserver[:0]
 	OpenReadFile()
 
 }

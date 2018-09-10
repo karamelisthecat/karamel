@@ -2,6 +2,7 @@ package resolvconf
 
 import (
 	"fmt"
+	"net"
 	"strconv"
 	"strings"
 )
@@ -90,15 +91,17 @@ func nameserverList() {
 	fmt.Println("**********************************************************")
 }
 func selectNameserver(slct int) (str string) {
-
 	//çağrıldığı program için kullanıcının seçtiği dnsi return ediyor.
 	return list[slct-1].address1
 }
 func addOneNameserver() {
 	var dns string
 	nameserverList()
-	fmt.Printf("choice one or enter DNS: ")
+	fmt.Printf("choice one or enter DNS(enter 'q' for exit): ")
 	entry, _ := fmt.Scanf("%s", &dns)
+	if dns == "q" {
+		SelectMenu()
+	}
 	slct, _ := strconv.Atoi(dns)
 	if entry == 0 {
 		SelectMenu()
@@ -106,16 +109,19 @@ func addOneNameserver() {
 	if 0 < slct && slct <= 6 {
 		dns = selectNameserver(slct)
 	}
-	tempNameserver = tempNameserver[:0]
-	tempNameserver = append(tempNameserver, "nameserver "+dns+"\n")
-	fmt.Println("\nLAST VIEW OF THE NAMESERVER LIST")
-	fmt.Println("**********************************************************")
-
-	for i := 0; i < len(tempNameserver); i++ {
-		fmt.Println(tempNameserver[i])
+	if controlNameserver(dns) == true {
+		tempNameserver = tempNameserver[:0]
+		tempNameserver = append(tempNameserver, "nameserver "+dns+"\n")
+		fmt.Println("\nLAST VIEW OF THE NAMESERVER LIST")
+		fmt.Println("**********************************************************")
+		for i := 0; i < len(tempNameserver); i++ {
+			fmt.Println(tempNameserver[i])
+		}
+		fmt.Println("**********************************************************")
+	} else {
+		fmt.Println("invalid IP address")
+		addOneNameserver()
 	}
-	fmt.Println("**********************************************************")
-
 }
 func lastViewNameserver() {
 	fmt.Println("**********************************************************")
@@ -131,19 +137,7 @@ func AddNameserver(Addns *string) {
 	var dns string
 	for {
 		if Addns != nil {
-			//if strings.EqualFold(*Addns, "0.0.0.0") == false {
-			var control = 0
-			var dnsName int
-			for dnsName = 0; dnsName < 6; dnsName++ {
-				if strings.EqualFold(*Addns, list[dnsName].name) == true {
-					tempNameserver[0] = "nameserver " + (list[dnsName].address1) + "\n"
-					control = 1
-					break
-				}
-			}
-			if control == 0 {
-				tempNameserver[0] = "nameserver " + *Addns + "\n"
-			}
+			addNameserverFlag(Addns)
 			break
 		} else {
 			fmt.Println("Select the line or enter 'q' for exit")
@@ -172,13 +166,33 @@ func AddNameserver(Addns *string) {
 			if 0 < slct && slct <= 6 {
 				dns = selectNameserver(slct)
 			}
-			if row < len(tempNameserver) {
-				tempNameserver[row-1] = "nameserver " + dns + "\n"
+			if controlNameserver(dns) == true {
+				if row <= len(tempNameserver) {
+					tempNameserver[row-1] = "nameserver " + dns + "\n"
+				} else {
+					tempNameserver = append(tempNameserver, "nameserver "+dns+"\n")
+				}
 			} else {
-				tempNameserver = append(tempNameserver, "nameserver "+dns+"\n")
+				fmt.Println("invalid IP address")
+				continue
 			}
 		}
 	}
+}
+func addNameserverFlag(Addns *string) {
+	var control = 0
+	var dnsName int
+	for dnsName = 0; dnsName < 6; dnsName++ {
+		if strings.EqualFold(*Addns, list[dnsName].name) == true {
+			tempNameserver[0] = "nameserver " + (list[dnsName].address1) + "\n"
+			control = 1
+			break
+		}
+	}
+	if control == 0 {
+		tempNameserver[0] = "nameserver " + *Addns + "\n"
+	}
+
 }
 func DeleteNameserver(Delns *int) {
 	for {
@@ -216,4 +230,31 @@ func DeleteNameserver(Delns *int) {
 			tempNameserver = tempNameserver[:len(tempNameserver)-1]
 		}
 	}
+}
+func controlNameserver(nameserver string) bool {
+	var ipv4Addr net.IP
+	var control = true
+	for {
+		ips, err := net.LookupIP(nameserver)
+		if err != nil {
+			//fmt.Println("Invalid IP address. ")
+			control = false
+			break
+		}
+		yeni := ips[0].String()
+		ipv4Addr = net.ParseIP(yeni)
+		if ipv4Addr == nil {
+			//	fmt.Println("the IP address you entered is incorrect.")
+			control = false
+			break
+		}
+		kontrol := ipv4Addr.DefaultMask()
+		if kontrol == nil {
+			//	fmt.Println("Invalid IP address. ")
+			control = false
+			break
+		}
+		break
+	}
+	return control
 }
