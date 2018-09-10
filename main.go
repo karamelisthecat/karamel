@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
+Loop:
 	for {
 		var choice string
 		fmt.Println("which file would you like to change: ")
@@ -16,17 +17,15 @@ func main() {
 		if entry == 0 {
 			continue
 		}
-		if choice == "1" {
+		switch choice {
+		case "1":
 			initfile.InitHosts()
-
-		} else if choice == "2" {
+		case "2":
 			initfile.InitResolv()
-
-		} else if choice == "q" {
-			break
-		} else {
+		case "q":
+			break Loop
+		default:
 			fmt.Println("please enter valid value")
 		}
-
 	}
 }
