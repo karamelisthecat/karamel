@@ -2,7 +2,8 @@ package flag
 
 import (
 	"flag"
-	resolv "github.com/karamelisthecat/karamel/resolvconfFile/resolvconf"
+	"github.com/karamelisthecat/karamel/hostsfile"
+	resolv "github.com/karamelisthecat/karamel/resolvconf"
 )
 
 var (
@@ -26,5 +27,21 @@ func Ifflags() {
 			resolv.AddNameserver(Addns)
 			break
 		}
+	}
+}
+
+func OneFlag() {
+	addIPptr := flag.Bool("addIP", false, "To add IP address.")
+	addGroupPtr := flag.Bool("addGroup", false, "To add group.")
+	addWebPtr := flag.Bool("web", false, "To web interface.")
+	flag.Parse()
+	if *addIPptr {
+		hostsfile.AddIPblock()
+	}
+	if *addGroupPtr {
+		hostsfile.AddGroup()
+	}
+	if *addWebPtr {
+		hostsfile.WebInterface()
 	}
 }

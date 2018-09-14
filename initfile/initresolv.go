@@ -1,8 +1,8 @@
 package initfile
 
 import (
-	"github.com/karamelisthecat/karamel/resolvconfFile/flag"
-	"github.com/karamelisthecat/karamel/resolvconfFile/resolvconf"
+	"github.com/karamelisthecat/karamel/flag"
+	"github.com/karamelisthecat/karamel/resolvconf"
 	"os"
 )
 
