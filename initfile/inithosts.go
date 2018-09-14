@@ -1,21 +1,15 @@
 package initfile
 
 import (
-	"github.com/karamelisthecat/karamel/flag"
 	"github.com/karamelisthecat/karamel/hostsfile"
-	"os"
 )
 
-var pathHosts = "/etc/hosts"
+var PathHosts = "/etc/hosts"
 
 func InitHosts() {
-	hostsfile.LinesHost, _ = hostsfile.ReadHostFile(pathHosts)
+	hostsfile.LinesHost, _ = hostsfile.ReadHostFile(PathHosts)
 	hostsfile.FindGroupNames()
-	if len(os.Args) > 1 {
-		flag.OneFlag()
-	} else {
-		userInterface()
-	}
+	userInterface()
 }
 
 func userInterface() {
