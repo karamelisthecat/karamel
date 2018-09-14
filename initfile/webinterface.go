@@ -3,9 +3,11 @@ package initfile
 import (
 	"fmt"
 	"github.com/karamelisthecat/karamel/hostsfile"
+	"github.com/karamelisthecat/karamel/resolvconf"
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -14,6 +16,9 @@ func WebInterface() {
 	http.HandleFunc("/addgroup", addGroup)
 	http.HandleFunc("/listhostsfile", listhostsfile)
 	http.HandleFunc("/addalias", addalias)
+	http.HandleFunc("/addnameserver", addNameserver) // setting router rule
+	http.HandleFunc("/nameserver", addOneNameserverWeb)
+
 	err := http.ListenAndServe(":9000", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
@@ -87,4 +92,41 @@ func listhostsfile(w http.ResponseWriter, r *http.Request) {
 func initHosts() {
 	hostsfile.LinesHost, _ = hostsfile.ReadHostFile(PathHosts)
 	hostsfile.FindGroupNames()
+}
+func addOneNameserverWeb(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		t, _ := template.ParseFiles("./webinterface/nameserver.gtpl")
+		t.Execute(w, nil)
+	} else {
+		r.ParseForm()
+		// logic part of log in
+		degisken := strings.Join(r.Form["nameserver"], "")
+		initResolv()
+		resolvconf.Adding(degisken)
+		resolvconf.SaveChange()
+	}
+}
+func addNameserver(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		t, _ := template.ParseFiles("./webinterface/addnameserver.gtpl")
+		t.Execute(w, nil)
+	} else {
+		r.ParseForm()
+		// logic part of log in
+		nameserverTemp := strings.Join(r.Form["nameserver"], "")
+		lineTemp := strings.Join(r.Form["line"], "")
+		line, err := strconv.Atoi(lineTemp)
+		if err != nil {
+			fmt.Println("invalid line number")
+		}
+		fmt.Println(line)
+		initResolv()
+		resolvconf.AddingRow(line, nameserverTemp)
+		resolvconf.SaveChange()
+	}
+}
+func initResolv() {
+	resolvconf.OpenReadFile()
+	resolvconf.KeepResolvconf()
+
 }
