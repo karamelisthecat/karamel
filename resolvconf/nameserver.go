@@ -123,6 +123,11 @@ func addOneNameserver() {
 		addOneNameserver()
 	}
 }
+func Adding(dns string) {
+	tempNameserver = tempNameserver[:0]
+	tempNameserver = append(tempNameserver, "nameserver "+dns+"\n")
+}
+
 func lastViewNameserver() {
 	fmt.Println("**********************************************************")
 	for i := 0; i < len(tempNameserver); i++ {
@@ -167,11 +172,7 @@ func AddNameserver(Addns *string) {
 				dns = selectNameserver(slct)
 			}
 			if controlNameserver(dns) == true {
-				if row <= len(tempNameserver) {
-					tempNameserver[row-1] = "nameserver " + dns + "\n"
-				} else {
-					tempNameserver = append(tempNameserver, "nameserver "+dns+"\n")
-				}
+				AddingRow(row, dns)
 			} else {
 				fmt.Println("invalid IP address")
 				continue
@@ -179,6 +180,15 @@ func AddNameserver(Addns *string) {
 		}
 	}
 }
+func AddingRow(row int, dns string) {
+	if row <= len(tempNameserver) {
+		tempNameserver[row-1] = "nameserver " + dns + "\n"
+	} else {
+		tempNameserver = append(tempNameserver, "nameserver "+dns+"\n")
+	}
+
+}
+
 func addNameserverFlag(Addns *string) {
 	var control = 0
 	var dnsName int
@@ -205,9 +215,7 @@ func DeleteNameserver(Delns *int) {
 			break
 		} else {
 			var no string
-			for i := 0; i < len(tempNameserver); i++ {
-				fmt.Println(i+1, ":", tempNameserver[i])
-			}
+			listNameserver()
 			fmt.Printf("please select the number you want to delete in nameservers or enter 'q' for exit: ")
 			entry, _ := fmt.Scanf("%s", &no)
 			if no == "q" {
@@ -223,13 +231,26 @@ func DeleteNameserver(Delns *int) {
 			if number != 1 && number != 2 && number != 3 {
 				continue
 			}
-
-			number = number - 1
-			tempNameserver[len(tempNameserver)-1] = tempNameserver[number]
-			tempNameserver[number] = tempNameserver[len(tempNameserver)-1]
-			tempNameserver = tempNameserver[:len(tempNameserver)-1]
+			Deleting(number)
 		}
 	}
+}
+func listNameserver() {
+
+	for i := 0; i < len(tempNameserver); i++ {
+		fmt.Println(i+1, ":", tempNameserver[i])
+	}
+
+}
+func Deleting(number int) {
+	number = number
+
+	tempNameserver[number-1] = tempNameserver[len(tempNameserver)-1]
+
+	tempNameserver[len(tempNameserver)-1] = tempNameserver[number-1]
+	//tempNameserver[number-1] = tempNameserver[len(tempNameserver)-1]
+	tempNameserver = tempNameserver[:len(tempNameserver)-1]
+
 }
 func controlNameserver(nameserver string) bool {
 	var ipv4Addr net.IP
