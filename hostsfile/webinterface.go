@@ -12,9 +12,27 @@ func WebInterface() {
 	http.HandleFunc("/addip", addip)
 	http.HandleFunc("/addgroup", addGroup)
 	http.HandleFunc("/listhostsfile", listhostsfile)
+	http.HandleFunc("/addalias", addalias)
 	err := http.ListenAndServe(":9000", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
+	}
+}
+
+func addalias(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("addalias method:", r.Method) //get request method
+	if r.Method == "GET" {
+		t, err := template.ParseFiles("./webinterface/addalias.gtpl")
+		fmt.Println(err)
+		t.Execute(w, nil)
+	} else {
+		r.ParseForm()
+		fmt.Println("IPAddress:", r.Form["ipaddress"])
+		fmt.Println("Alias", r.Form["alias"])
+
+		ipaddressTemp := strings.Join(r.Form["ipaddress"], "")
+		aliasTemp := strings.Join(r.Form["alias"], "")
+		AddAliasInterface(ipaddressTemp, aliasTemp)
 	}
 }
 
