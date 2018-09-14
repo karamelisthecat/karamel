@@ -12,8 +12,9 @@ func InitHosts() {
 	hostsfile.FindGroupNames()
 	if len(os.Args) > 1 {
 		flag.OneFlag()
+	} else {
+		userInterface()
 	}
-	userInterface()
 }
 
 func userInterface() {
