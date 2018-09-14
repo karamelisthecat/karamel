@@ -58,7 +58,8 @@ func AddNewLine() {
 // Writing /etc/Hosts file to the screen.
 func WriteLines() {
 	fmt.Println("\nHosts File ")
-	fmt.Println("______________________________________\n")
+	AddUnderscoreLine()
+	fmt.Print("\n")
 	for i := 0; i < len(LinesHost); i++ {
 		fmt.Print(LinesHost[i])
 	}
@@ -90,7 +91,7 @@ func ListGroup() {
 	WriteGroupNames()
 	fmt.Print("Which group would you like to wiev: ")
 	fmt.Scan(&nameGroup)
-	fmt.Println("______________________________________")
+	AddUnderscoreLine()
 	FindtheGroup(nameGroup)
 }
 
@@ -146,7 +147,7 @@ func RemoveCommendLineIP() {
 	lineNmbr = checkUserInput()
 	newField = deleteCommendLine(lineNmbr - 1)
 	AddLinesHosts(newField, (lineNmbr - 1), (lineNmbr))
-	fmt.Println("______________________________________")
+	AddUnderscoreLine()
 	fmt.Println("Success!")
 	LastViewoftheFile()
 	WaitUser()
@@ -174,6 +175,16 @@ func checkUserInput() int {
 		break
 	}
 	return LineNmbr
+}
+
+// Print the last view of the file.
+func LastViewoftheFile() {
+	var userOpt string
+	fmt.Print("\nWould you like to see the last view of the file? \n('y' or 'Y': ")
+	fmt.Scan(&userOpt)
+	if userOpt == "y" || userOpt == "Y" {
+		WriteLines()
+	}
 }
 
 func deleteCommendLine(lineNmbr int) string {
