@@ -227,47 +227,66 @@ func findGroupLine(i int) (bool, int) {
 	return false, -1
 }
 
-//Adding Alias to specific IP address.
+// Adding Alias to specific IP address.
 func AddAlias() {
-	var addIpTemp string
-	LastViewoftheFile()
-	ipField, i := checkAlias()
-	if i != -1 {
-		AddLinesHosts(ipField, i, (i + 1))
-		fmt.Println("Success!")
-		LastViewoftheFile()
-	} else {
-		fmt.Printf("Would you like to add this IP address? \n ('y' or 'Y': ")
-		fmt.Scan(&addIpTemp)
-		AddIPblock()
-		LastViewoftheFile()
-	}
-
-}
-
-func checkAlias() (string, int) {
-	var iptemp string
-	var ctrl = false
-	var ipField string
 	var i int
-	fmt.Printf("Which IP address would you like to add alias: ")
-	fmt.Scan(&iptemp)
-	for i = 0; i < len(LinesHost); i++ {
-		if strings.HasPrefix(LinesHost[i], iptemp) {
-			fmt.Printf("Please enter the alias: ")
-			var addTemp string
-			fmt.Scan(&addTemp)
-			bolTemp := strings.Split(string(LinesHost[i]), "\n")
-			ipField = string(bolTemp[0]) + "\t" + addTemp + "\n"
-			ctrl = true
-			break
+	var temp string
+	LastViewoftheFile()
+	temp = askAliasIPtoUser("askip")
+	i = findIPAddressinfile(temp)
+	if i != -1 {
+		temp = askAliasIPtoUser("askalias")
+		ipfieldtemp := AddfiletoAlias(temp, i)
+		fmt.Println("Success!")
+		fmt.Println(ipfieldtemp)
+	} else {
+		temp = askAliasIPtoUser("askaddip")
+		if temp == "y" || temp == "Y" {
+			AddIPblock()
 		}
 	}
-	if ctrl != true {
-		fmt.Println("This IP address does not exist.")
-		return iptemp, -1
+}
+
+// Adding Alias to specific IP address.
+func AddAliasInterface(ipaddress string, alias string) {
+	var i int
+	i = findIPAddressinfile(ipaddress)
+	if i == -1 {
+		fmt.Println("ERROR")
 	}
-	return ipField, i
+	AddfiletoAlias(alias, i)
+}
+
+func findIPAddressinfile(iptemp string) int {
+	for i := 0; i < len(LinesHost); i++ {
+		if strings.HasPrefix(LinesHost[i], iptemp) {
+			return i
+		}
+	}
+	return -1
+}
+
+func AddfiletoAlias(alias string, i int) string {
+	var ipField string
+	splitTemp := strings.Split(string(LinesHost[i]), "\n")
+	ipField = string(splitTemp[0]) + "\t" + alias + "\n"
+	AddLinesHosts(ipField, i, (i + 1))
+	return ipField
+}
+
+func askAliasIPtoUser(opt string) string {
+	var addtemp string
+	if opt == "askip" {
+		fmt.Printf("Which IP address would you like to add alias: ")
+		fmt.Scan(&addtemp)
+	} else if opt == "askalias" {
+		fmt.Printf("Please enter the alias: ")
+		fmt.Scan(&addtemp)
+	} else {
+		fmt.Printf("Would you like to add this IP address? \n ('y' or 'Y'): ")
+		fmt.Scan(&addtemp)
+	}
+	return addtemp
 }
 
 // Waiting user.

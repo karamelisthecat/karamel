@@ -14,7 +14,7 @@ var (
 )
 
 //Reading Hosts file.
-func ReadHostFile(filePath string) ([]string, error) { //dosyayı okur
+func ReadHostFile(filePath string) ([]string, error) {
 	var line []string
 	file, err := ioutil.ReadFile(filePath)
 	if err != nil {
@@ -180,7 +180,7 @@ func checkUserInput() int {
 // Print the last view of the file.
 func LastViewoftheFile() {
 	var userOpt string
-	fmt.Print("\nWould you like to see the last view of the file? \n('y' or 'Y': ")
+	fmt.Print("Would you like to see the last view of the file? \n('y' or 'Y'): ")
 	fmt.Scan(&userOpt)
 	if userOpt == "y" || userOpt == "Y" {
 		WriteLines()
